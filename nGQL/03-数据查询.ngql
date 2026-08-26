@@ -1,0 +1,17 @@
+USE learning;
+MATCH (v:person) RETURN v.person.name, v.person.age;
+MATCH (v:person) WHERE v.person.age > 28 RETURN v.person.name, v.person.age;
+MATCH (v:person) RETURN v.person.name AS name, v.person.age AS age ORDER BY age DESC;
+MATCH (v:person) RETURN v.person.name AS name, v.person.age AS age ORDER BY age DESC LIMIT 2;
+GO FROM "p1" OVER friend YIELD friend._dst AS friend_id;
+GO 1 TO 2 STEPS FROM "p1" OVER friend YIELD friend._dst AS friend_id;
+MATCH (v:person)-[:friend]->(f:person) WHERE id(v) == "p1" RETURN f.person.name;
+MATCH (v:person)-[:friend*2]->(f:person) WHERE id(v) == "p1" RETURN DISTINCT f.person.name;
+MATCH p = (v:person)-[:friend*1..2]->(f:person) WHERE id(v) == "p1" RETURN p;
+MATCH (a:person)-[e:work_at]->(b:company) RETURN a.person.name, e.position, b.company.name;
+MATCH (v:person) RETURN count(*) AS person_cnt;
+MATCH (a:person)-[e:work_at]->(b:company) RETURN b.company.name, count(*) AS emp_cnt;
+UPDATE VERTEX "p1" SET person.age = 31;
+FETCH PROP ON person "p1" YIELD person.name, person.age;
+UPSERT VERTEX "p1" SET person.age = 32;
+FETCH PROP ON person "p1" YIELD person.name, person.age;

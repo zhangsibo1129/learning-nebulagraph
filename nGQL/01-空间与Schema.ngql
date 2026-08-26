@@ -1,0 +1,15 @@
+USE learning;
+CREATE TAG IF NOT EXISTS person (name string, age int, email string);
+CREATE TAG IF NOT EXISTS company (name string, founded int);
+CREATE EDGE IF NOT EXISTS friend (since date);
+CREATE EDGE IF NOT EXISTS work_at (position string, start_year int);
+SHOW TAGS;
+SHOW EDGES;
+DESC TAG person;
+DESC EDGE friend;
+ALTER TAG person ADD (gender string);
+DESC TAG person;
+CREATE TAG INDEX IF NOT EXISTS person_name_age_index ON person(name(32), age);
+CREATE TAG INDEX IF NOT EXISTS person_age_index ON person(age);
+CREATE TAG INDEX IF NOT EXISTS company_name_index ON company(name(32));
+SHOW TAG INDEXES;

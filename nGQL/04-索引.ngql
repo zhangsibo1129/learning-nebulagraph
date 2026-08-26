@@ -1,0 +1,13 @@
+USE learning;
+SHOW TAG INDEXES;
+SHOW EDGE INDEXES;
+DESC TAG INDEX person_name_age_index;
+LOOKUP ON person WHERE person.name == "Alice" YIELD person.name, person.age;
+LOOKUP ON person WHERE person.name == "Alice" AND person.age > 25 YIELD person.name, person.age;
+LOOKUP ON person WHERE person.age > 28 YIELD person.name, person.age;
+EXPLAIN MATCH (v:person) WHERE v.person.age > 28 RETURN v.person.name;
+PROFILE MATCH (v:person) WHERE v.person.age > 28 RETURN v.person.name;
+CREATE EDGE INDEX IF NOT EXISTS work_at_position_index ON work_at(position(32));
+REBUILD EDGE INDEX work_at_position_index;
+SHOW JOBS;
+LOOKUP ON work_at WHERE work_at.position == "Engineer" YIELD work_at.position;

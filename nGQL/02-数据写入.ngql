@@ -1,0 +1,11 @@
+USE learning;
+INSERT VERTEX person (name, age, email, gender) VALUES "p1": ("Alice", 30, "alice@example.com", "female"), "p2": ("Bob", 25, "bob@example.com", "male"), "p3": ("Carol", 35, "carol@example.com", "female"), "p4": ("Dave", 28, "dave@example.com", "male"), "p5": ("Eve", 32, "eve@example.com", "female");
+INSERT VERTEX company (name, founded) VALUES "c1": ("NebulaTech", 2018), "c2": ("GraphSoft", 2015), "c3": ("DataWorks", 2020);
+INSERT EDGE friend (since) VALUES "p1" -> "p2": (date("2019-06-01")), "p1" -> "p3": (date("2020-01-15")), "p2" -> "p3": (date("2021-03-20")), "p2" -> "p4": (date("2018-11-05")), "p3" -> "p5": (date("2022-07-30")), "p4" -> "p5": (date("2020-09-12"));
+INSERT EDGE work_at (position, start_year) VALUES "p1" -> "c1": ("Engineer", 2019), "p2" -> "c1": ("Engineer", 2020), "p3" -> "c2": ("Manager", 2016), "p4" -> "c3": ("Analyst", 2021), "p5" -> "c2": ("Engineer", 2018);
+FETCH PROP ON person "p1" YIELD person.name, person.age, person.email, person.gender;
+FETCH PROP ON person "p1", "p2" YIELD person.name, person.age;
+FETCH PROP ON friend "p1" -> "p2" YIELD friend.since;
+FETCH PROP ON work_at "p1" -> "c1" YIELD work_at.position, work_at.start_year;
+MATCH (v:person) RETURN v.person.name, v.person.age;
+MATCH (v:company) RETURN v.company.name, v.company.founded;

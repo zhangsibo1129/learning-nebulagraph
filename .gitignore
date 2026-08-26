@@ -1,0 +1,14 @@
+# NebulaGraph 数据与日志（由 docker-compose 挂载生成）
+data/
+logs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.idea/
+.vscode/
+.DS_Store
