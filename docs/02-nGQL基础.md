@@ -20,13 +20,16 @@ SHOW SPACES;
 -- 使用图空间（后续操作都在该空间内）
 USE learning;
 
--- 查看当前空间
-SHOW CURRENT SPACE;
+-- 查看图空间配置（分片数、副本数、VID 类型等）
+DESC SPACE learning;
 
 -- 删除图空间（慎用，会删除所有数据）
 -- DROP SPACE learning;
 ```
 
+> **当前空间**：没有"查看当前空间"的命令，当前所在空间显示在 Console 提示符中，
+> 例如 `(root@nebula) [learning]>` 中的 `learning`。
+>
 > **VID 类型**：`FIXED_STRING(n)` 适合业务 ID（如 UUID、名称）；`INT64` 适合数字 ID。
 > VID 是点的唯一标识，创建后不可修改。
 
@@ -36,13 +39,12 @@ SHOW CURRENT SPACE;
 
 ### 2.1 创建 Tag（点类型）
 
+> **提示**：本节的 SQL 均为单行语句，可直接复制粘贴到 Console 执行
+> （nebula-console 不支持多行语句）。
+
 ```sql
 -- 创建 person 标签，包含 name/age/email 三个属性
-CREATE TAG IF NOT EXISTS person (
-    name  string,
-    age   int,
-    email string
-);
+CREATE TAG IF NOT EXISTS person (name string, age int, email string);
 
 -- 查看所有 Tag
 SHOW TAGS;
@@ -55,9 +57,7 @@ DESC TAG person;
 
 ```sql
 -- 创建 friend 边类型，表示"朋友"关系，带一个属性 since（认识时间）
-CREATE EDGE IF NOT EXISTS friend (
-    since date
-);
+CREATE EDGE IF NOT EXISTS friend (since date);
 
 -- 查看所有边类型
 SHOW EDGES;
@@ -103,10 +103,8 @@ ALTER TAG person DROP (email);
 -- 插入一个 person 点，VID 为 "p1"
 INSERT VERTEX person (name, age, email) VALUES "p1": ("Alice", 30, "alice@example.com");
 
--- 一次插入多个点
-INSERT VERTEX person (name, age, email) VALUES
-    "p2": ("Bob", 25, "bob@example.com"),
-    "p3": ("Carol", 35, "carol@example.com");
+-- 一次插入多个点（单行）
+INSERT VERTEX person (name, age, email) VALUES "p2": ("Bob", 25, "bob@example.com"), "p3": ("Carol", 35, "carol@example.com");
 ```
 
 ### 3.2 插入边（INSERT EDGE）
@@ -115,10 +113,8 @@ INSERT VERTEX person (name, age, email) VALUES
 -- 插入一条边：p1 -> p2 是朋友，2019 年认识
 INSERT EDGE friend (since) VALUES "p1" -> "p2": (date("2019-06-01"));
 
--- 一次插入多条边
-INSERT EDGE friend (since) VALUES
-    "p1" -> "p3": (date("2020-01-15")),
-    "p2" -> "p3": (date("2021-03-20"));
+-- 一次插入多条边（单行）
+INSERT EDGE friend (since) VALUES "p1" -> "p3": (date("2020-01-15")), "p2" -> "p3": (date("2021-03-20"));
 ```
 
 > **注意**：插入边时，两端的点必须已存在，否则报错。
